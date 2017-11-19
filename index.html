@@ -1,0 +1,103 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<link rel="icon" href="favicon.ico"></link>
+		<title>theoldmoon0602</title>
+		<style>
+* {
+	font-family: 'times';
+}
+body {
+	width: 80vw;
+	height: 80vh;
+	margin: 0 auto;
+	background-color: rgb(0,0,0);
+	color: rgb(255,255,255);
+}
+ul {
+	list-style: none;
+	padding: 0;
+}
+a {
+	text-decoration: none;
+	color: inherit;
+}
+a:hover {
+	text-decoration: underline;
+}
+#container {
+	width: 100%;
+	height: 100%;
+	font-size: 24px;
+}
+#head {
+	text-align: center;
+}
+#randomplace {
+	width: 100%;
+	height: 100%;
+}
+		</style>
+	</head>
+	<body>
+		<div id="container">
+			<h1 id="head">THEOLDMOON0602</h1>
+			<div id="randomplace">
+				<span>Nara Kosen/Information Engineering Course 4th grade</span>
+				<span>Programming, Capture the Flag</span>
+				<span>D, Python, PHP</span>
+				<span><a href="//kosen14s.github.io">kosen14s</a></span>
+				<span>joken/insecure</span>
+				<span>Modern Visual Culture Creator's Circle</span>
+				<span><a href="//furutsuki.hatenablog.com">Blog</a></span>
+				<span><a href="//github.com/theoldmoon0602">GitHub</a></span>
+				<span><a href="//twitter.com/theoldmoon0602">Twitter</a></span>
+			</div>
+		</div>
+	</body>
+	<script>
+// xor128 by wikipedia
+class XorShift {
+	constructor(seed = 123456789) {
+		this.x = seed;
+		this.y = 362436069;
+		this.z = 521288629;
+		this.w = 88675123;
+	}
+	next(max=Number.MAX_SAFE_INTEGER) {
+		var t = this.x ^ (this.x << 11);
+		this.x = this.y;
+		this.y = this.z;
+		this.z = this.w;
+		this.w = (this.w ^ (this.w >> 19)) ^ (t ^ (t>>8));
+
+		return this.w % max;
+	}
+}
+async function randomplace() {
+	var items = document.getElementById("randomplace");
+	var rd = new XorShift(1000002); // const seed
+
+	var rect = items.getBoundingClientRect();
+	console.log(rect.width);
+	for (var i = 0; i < items.children.length; i++) {
+		var e = items.children[i];
+		var childrect = e.getBoundingClientRect();
+		var x = rd.next(rect.width - childrect.width);
+		var y = rd.next(rect.height - childrect.height);
+		var r = rd.next(360);
+
+		console.log("max:", rect.width - childrect.width);
+		console.log("mod:", x);
+
+		e.style.position = "absolute";
+		e.style.left = x + "px";
+		e.style.top = (rect.y + y) + "px";
+		e.style.transform = "rotate("+r+"deg)";
+	}
+}
+randomplace();
+	</script>
+</html>
